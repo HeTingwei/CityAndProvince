@@ -23,6 +23,9 @@ import java.util.HashMap;
 
 public class MainActivity extends Activity {
 
+    String province, city;//最终选择结果放在这两个变量******************************************
+   //因为spinner在加载视图的时候会自动调用点击响应事件，这两个变量在那个时候就已经初始化了
+
     HashMap<String, String> provinceHash = new HashMap<>();
     String[] provinceString = new String[34];
 
@@ -50,7 +53,7 @@ public class MainActivity extends Activity {
         getProvinces(file); // 得到省的列表
 
         // 设置spinner，不用管什么作用
-        provinceAdapter = new ArrayAdapter<String>(this,
+        provinceAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, provinceString);
         provinceAdapter
                 .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);// 设置下拉风格
@@ -58,6 +61,10 @@ public class MainActivity extends Activity {
         provinceSpinner.setOnItemSelectedListener(new ProvinceSelectedListener(MainActivity.this));// 添加监听
         provinceSpinner.setVisibility(View.VISIBLE);// 设置默认值
 
+    }
+
+    public void click(View v) {
+        Toast.makeText(this,   province +"  "+ city, Toast.LENGTH_SHORT).show();
     }
 
     public String readFile() {
@@ -184,7 +191,7 @@ public class MainActivity extends Activity {
                                    long arg3) {
 
             String provinceName = provinceString[arg2];
-            Toast.makeText(context, provinceName, Toast.LENGTH_LONG).show();
+            province = provinceName;
             String guid = provinceHash.get(provinceName);
             cityString = getCitys(guid, file);
 
@@ -219,6 +226,7 @@ public class MainActivity extends Activity {
         public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
                                    long arg3) {
             String cityName = cityString[arg2];
+            city = cityName;
             if (cityName.equals("") || cityName == null) {
                 cityName = cityString[0];
                 cityNo = cityHash.get(cityName);
